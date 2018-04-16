@@ -1,0 +1,38 @@
+html, body {
+  margin: 10px;
+}
+
+.grid {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  /*grid-auto-rows: 200px;*/
+  grid-auto-flow: dense;
+}
+
+.grid__flex {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.grid__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.horizontal {
+  grid-column: span 2;
+}
+
+.vertical {
+  grid-row: span 2;
+}
+
+.big {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
