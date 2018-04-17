@@ -6,7 +6,6 @@ html, body {
   display: grid;
   grid-gap: 10px;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  /*grid-auto-rows: 200px;*/
   grid-auto-flow: dense;
 }
 
@@ -22,17 +21,3 @@ html, body {
   height: 100%;
   object-fit: cover;
 }
-
-.horizontal {
-  grid-column: span 2;
-}
-
-.vertical {
-  grid-row: span 2;
-}
-
-.big {
-  grid-column: span 2;
-  grid-row: span 2;
-}
-

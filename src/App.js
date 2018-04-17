@@ -17,31 +17,35 @@ class App extends Component {
     items: []
   }
 
-  async getAnime(query, variables) {
+  getAnime = async (query, variables) => {
     try {
       const response = await axios.post('https://graphql.anilist.co', {
         query,
         variables
       });
-      console.log(response)
+
+      // Log the response so we can look at it in the console
+      console.log(response.data)
+
+      // Set the data to the state
       this.setState(() => ({
         isLoaded: true,
         items: response.data.data.Page.media
       }));
+
     } catch (error) {
+      // If there's an error, set the error to the state
       this.setState(() => ({ error }))
     }
   }
 
   componentDidMount() {
 
+    // This is the GraphQL query
     const query = `
     query {
       Page {
-        media(
-          isAdult: false
-          sort: POPULARITY_DESC
-        ) {
+        media(isAdult: false, sort: POPULARITY_DESC) {
           id
           title {
             romaji
@@ -54,9 +58,13 @@ class App extends Component {
       }
     }
     `;
+
+    // These variables are optional, leave empty for now
     const variables = {};
 
+    // We call the method here to execute our async function
     this.getAnime(query, variables)
+
   }
 
   render() {
