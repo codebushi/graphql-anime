@@ -1,45 +1,10 @@
-var query = `
-query {
-  Page {
-    media(
-      isAdult: false
-      seasonYear: 2018
-      season: SPRING
-      sort: POPULARITY_DESC
-    ) {
-      id
-      title {
-        romaji
-        english
-      }
-      coverImage {
-        large
-      }
-    }
-  }
-}
-`;
-
-var variables = {};
-
-var payload = {
-  query: query,
-  variables: variables
-};
+import axios from 'axios';
 
 export const api = {
-  getAnime: async function() {
+  getAnime: async function(payload) {
     try {
-      const response = await fetch("https://graphql.anilist.co", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
-      const parsedResponse = await response.json();
-      return parsedResponse.data;
+      const response = await axios.post('https://graphql.anilist.co', payload);
+      return response.data.data;
     } catch (error) {
       throw new Error(error);
     }

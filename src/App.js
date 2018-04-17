@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 
-import { api } from './utils/api';
+import axios from 'axios';
 
 const GridItem = (props) => (
   <div className="grid__flex">
@@ -12,32 +12,63 @@ const GridItem = (props) => (
 class App extends Component {
 
   state = {
+    error: null,
     isLoaded: false,
     items: []
   }
 
-  componentDidMount() {
-    api.getAnime().then((anime) => {
-
-      console.log(anime)
-
+  async getAnime(query, variables) {
+    try {
+      const response = await axios.post('https://graphql.anilist.co', {
+        query,
+        variables
+      });
+      console.log(response)
       this.setState(() => ({
         isLoaded: true,
-        items: anime.Page.media
-      }))
+        items: response.data.data.Page.media
+      }));
+    } catch (error) {
+      this.setState(() => ({ error }))
+    }
+  }
 
-    }).catch((error) => {
-      console.log(error)
-    });
+  componentDidMount() {
+
+    const query = `
+    query {
+      Page {
+        media(
+          isAdult: false
+          sort: POPULARITY_DESC
+        ) {
+          id
+          title {
+            romaji
+            english
+          }
+          coverImage {
+            large
+          }
+        }
+      }
+    }
+    `;
+    const variables = {};
+
+    this.getAnime(query, variables)
   }
 
   render() {
+
     const { error, isLoaded, items } = this.state;
+
     if (error) {
-      return <div>Error: {error.message}</div>;
+      return <div>{error.message}</div>;
     } else if (!isLoaded) {
       return <div>Loading...</div>;
     } else {
+
       return (
         <div className="grid">
           {items.map(item => (
@@ -45,6 +76,7 @@ class App extends Component {
           ))}
         </div>
       );
+
     }
   }
 
